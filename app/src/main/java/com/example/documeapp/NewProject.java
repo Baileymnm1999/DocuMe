@@ -13,11 +13,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import java.text.Normalizer;
+import android.content.Context;
+import android.database.DataSetObserver;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.SpinnerAdapter;
 
 /**
  * Created by user on 12/13/16.
@@ -41,6 +50,9 @@ public class NewProject extends AppCompatActivity
         //LinearLayout form= (LinearLayout) findViewById(R.id.form);
         //EditText newProject= new EditText(getApplicationContext());
         //form.addView(newProject);
+
+
+
     }
 
     @Override
@@ -100,3 +112,4 @@ public class NewProject extends AppCompatActivity
         return true;
     }
 }
+
