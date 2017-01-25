@@ -57,13 +57,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/content_space"
+                android:layout_marginLeft="@dimen/content_space"
+                android:layout_marginRight="@dimen/content_space"
                 android:hint="@string/project_name"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/content_space"
                 android:layout_marginBottom="@dimen/after_subtitle_space"
-                android:layout_marginLeft="@dimen/indent"
+                android:layout_marginLeft="@dimen/content_space"
+                android:layout_marginRight="@dimen/content_space"
                 android:text="@string/genre_prompt"
                 android:textStyle="bold"
                 android:textSize="@dimen/subtitle_font_size"
@@ -72,6 +75,8 @@
                 android:id="@+id/genre_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/content_space"
+                android:layout_marginRight="@dimen/content_space"
                 android:entries="@array/genres"
                 android:prompt="@string/genre_prompt" />
             <EditText
@@ -79,8 +84,36 @@
                 android:layout_marginTop="@dimen/content_space"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="6"
+                android:gravity="start"
                 android:hint="@string/describe_your_project"
-                android:shadowColor="@color/black"/>
+                android:shadowColor="@color/black"
+                android:layout_marginLeft="@dimen/content_space"
+                android:layout_marginRight="@dimen/content_space"
+                android:background="@drawable/project_description_style"/>
+            <Button
+                android:id="@+id/new_step_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="@dimen/center_button"
+                android:layout_marginLeft="@dimen/center_button"
+                android:layout_marginRight="@dimen/center_button"
+                android:padding="@dimen/indent"
+                android:text="@string/add_a_step"
+                android:onClick=""
+                style="?android:attr/borderlessButtonStyle"/>
+            <Button
+                android:id="@+id/save_project_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="@dimen/center_button"
+                android:layout_marginLeft="@dimen/center_button"
+                android:layout_marginRight="@dimen/center_button"
+                android:padding="@dimen/indent"
+                android:text="@string/save_project"
+                style="?android:attr/borderlessButtonStyle"/>
 
 
         </LinearLayout>

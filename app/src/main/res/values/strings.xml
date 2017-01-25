@@ -6,9 +6,11 @@
     <string name="btnClick">+</string>
 
     <string name="genre_prompt">Project Genre</string>
-    <string name="describe_your_project">Describe your project...</string>
+    <string name="describe_your_project"> Describe your project...</string>
     <string name="create_a_project">Create A Project</string>
     <string name="project_name">Project Name</string>
+    <string name="save_project">Save Project</string>
+    <string name="add_a_step">Add a step</string>
 
     <string-array name="genres">
         <item>Arts and Entertainment</item>

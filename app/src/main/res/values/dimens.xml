@@ -10,4 +10,5 @@
     <dimen name="subtitle_font_size">15sp</dimen>
     <dimen name="content_space">20dp</dimen>
     <dimen name="after_subtitle_space">5dp</dimen>
+    <dimen name="center_button">50dp</dimen>
 </resources>
