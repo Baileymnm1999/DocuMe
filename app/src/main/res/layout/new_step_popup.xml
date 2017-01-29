@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:background="#88000000">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/add_step_popup"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/popup_hight"
+        android:background="@drawable/project_description_style"
+        android:layout_gravity="center" >
+
+        <TextView
+            android:layout_width="@dimen/popup_width"
+            android:layout_height="@dimen/popup_bar_height"
+            android:background="@drawable/add_step_popup"
+            android:text="@string/add_a_step"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_width"
+            android:background="@color/black"/>
+
+        <ScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/ScrollView02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                 <EditText
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/content_space"
+                     android:layout_marginRight="@dimen/content_space"
+                     android:layout_marginLeft="@dimen/content_space"
+                     android:hint="@string/step_title"
+                     android:textColorHint="@color/black"
+                     android:textColor="@color/black"
+                     android:padding="@dimen/editText_margin"
+                     android:background="@drawable/project_description_style"/>
+
+            <RelativeLayout
+                android:id="@+id/camera_buttons_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/take_picture_button"
+                    android:layout_width="@dimen/one_twenty_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/content_space"
+                    android:layout_marginStart="@dimen/button_end_space"
+                    android:layout_marginLeft="@dimen/button_end_space"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:text="@string/take_a_picture"
+                    style="?android:attr/borderlessButtonStyle"/>
+                <Button
+                    android:id="@+id/choose_picture_button"
+                    android:layout_width="@dimen/one_twenty_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/content_space"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="@dimen/button_end_space"
+                    android:layout_marginRight="@dimen/button_end_space"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:text="@string/choose_picture"
+                    style="?android:attr/borderlessButtonStyle"/>
+
+            </RelativeLayout>
+            <ImageButton
+                android:id="@+id/step_photo_container"
+                android:contentDescription="@string/step_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/content_space"
+                android:layout_marginLeft="@dimen/content_space"
+                android:layout_marginRight="@dimen/content_space"
+                android:background="#22000000" />
+            <EditText
+                android:id="@+id/step_description"
+                android:layout_marginTop="@dimen/content_space"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="4"
+                android:scrollbars="none"
+                android:inputType="textCapSentences|textMultiLine"
+                android:gravity="start"
+                android:padding="@dimen/editText_margin"
+                android:hint="@string/describe_this_step"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:shadowColor="@color/black"
+                android:layout_marginLeft="@dimen/content_space"
+                android:layout_marginRight="@dimen/content_space"
+                android:background="@drawable/project_description_style"/>
+            <Button
+                android:id="@+id/save_step_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="@dimen/content_space"
+                android:layout_marginLeft="@dimen/center_button"
+                android:layout_marginRight="@dimen/center_button"
+                android:layout_marginBottom="@dimen/content_space"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/indent"
+                android:text="@string/save_step"
+                android:textColor="@color/white"
+                style="?android:attr/borderlessButtonStyle"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>
