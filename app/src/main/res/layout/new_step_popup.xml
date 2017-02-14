@@ -81,7 +81,7 @@
                     style="?android:attr/borderlessButtonStyle"/>
 
             </RelativeLayout>
-            <ImageButton
+            <ImageView
                 android:id="@+id/step_photo_container"
                 android:contentDescription="@string/step_photo"
                 android:layout_width="match_parent"

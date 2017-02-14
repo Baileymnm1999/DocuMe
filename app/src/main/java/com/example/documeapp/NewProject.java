@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.view.ViewGroup.LayoutParams;
 
@@ -67,6 +69,8 @@ public class NewProject extends AppCompatActivity
     private Button mButton;
     private Button takePictureButton;
     private PopupWindow mPopupWindow;
+    private ImageView mImageView;
+    private Button selectPictureButton;
 
 
     //Done setting up onClick
@@ -136,6 +140,27 @@ public class NewProject extends AppCompatActivity
                     mPopupWindow.setElevation(5.0f);
                 }
 
+                takePictureButton = (Button) customView.findViewById(R.id.take_picture_button);
+                selectPictureButton = (Button) customView.findViewById(R.id.choose_picture_button);
+                mImageView = (ImageView) customView.findViewById(R.id.step_photo_container);
+
+                takePictureButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dispatchTakePictureIntent();
+
+                    }
+                });
+                selectPictureButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        dispatchSelectPictureIntent();
+
+                    }
+                });
+
                 // Get a reference for the custom view close button
                 Button save_button = (Button) customView.findViewById(R.id.save_step_button);
 
@@ -168,21 +193,10 @@ public class NewProject extends AppCompatActivity
             }
         });
 
-        takePictureButton = (Button) findViewById(R.id.take_picture_button);
-
-/*        takePictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dispatchTakePictureIntent();
-
-            }
-        });
-*/
     }
 
     //Create int to request camera to take a picture
-/*    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -190,8 +204,16 @@ public class NewProject extends AppCompatActivity
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+    static final int PICK_IMAGE_REQUEST = 2;
+    private void dispatchSelectPictureIntent() {
+        Intent intent = new Intent();
+        // Show only images, no videos or anything else
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        // Always show the chooser (if there are multiple options available)
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
 
-    ImageView mImageView = (ImageView) findViewById(R.id.step_photo_container);
     //Retrieve thumbnail bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -199,31 +221,49 @@ public class NewProject extends AppCompatActivity
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
+        }else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri uri =data.getData();
+            try{
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                mImageView.setImageBitmap(rotateImage(bitmap, 90));
+            }catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(),"Invalid File",Toast.LENGTH_SHORT);
+            }
+        }else{
+            Toast.makeText(getApplicationContext(),"An error occurred",Toast.LENGTH_SHORT);
         }
     }
 
-    //Function to create a file documenting photo filename and location
-/*    String mCurrentPhotoPath;
+    //Rotate an image 90 degrees clockwise
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+    //Function to create a file documenting photo filename and location
+//    String mCurrentPhotoPath;
+//
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
 //                imageFileName,  /* prefix */
 //                ".jpg",         /* suffix */
 //                storageDir      /* directory */
-/*        );
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        mCurrentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
 
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-*/
-//    static final int REQUEST_TAKE_PHOTO = 1;
+/*    static final int REQUEST_TAKE_PHOTO = 1;
 
-/*    private void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -244,32 +284,8 @@ public class NewProject extends AppCompatActivity
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
-    }
+    }*/
 
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageView.setImageBitmap(bitmap);
-    }
-*/
     @Override
     public void onBackPressed() {
 //        View displayedChild = newProjectViewFlipper.getCurrentView();
