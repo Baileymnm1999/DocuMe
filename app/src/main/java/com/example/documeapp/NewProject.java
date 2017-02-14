@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ import android.widget.Spinner;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,6 +73,7 @@ public class NewProject extends AppCompatActivity
     private PopupWindow mPopupWindow;
     private ImageView mImageView;
     private Button selectPictureButton;
+    public Uri uri;
 
 
     //Done setting up onClick
@@ -169,6 +172,21 @@ public class NewProject extends AppCompatActivity
                     @Override
                     public void onClick(View view) {
                         // Dismiss the popup window
+
+                        String title =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_title)).getText().toString();
+                        String description =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_description)).getText().toString();
+                        Uri stepPicture = uri;
+
+                        ProjectStep step = new ProjectStep();
+                        step.setTitle(title);
+                        step.setDescription(description);
+                        step.setStepPicture(stepPicture);
+
+                        Log.d("TITLE", step.getTitle());
+                        Log.d("DESCRIPTION", step.getDescription());
+                        Log.d("IMAGE URI", step.getStepPicture().toString());
+
+
                         mPopupWindow.dismiss();
                     }
                 });
@@ -221,8 +239,9 @@ public class NewProject extends AppCompatActivity
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
+            uri =data.getData();
         }else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
-            Uri uri =data.getData();
+            uri =data.getData();
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 mImageView.setImageBitmap(rotateImage(bitmap, 90));
@@ -239,6 +258,7 @@ public class NewProject extends AppCompatActivity
     public static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
+        Log.d("docume", Integer.toString(source.getHeight()));
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 

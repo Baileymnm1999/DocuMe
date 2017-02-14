@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content">
 
                  <EditText
+                     android:id="@+id/step_title"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_marginTop="@dimen/content_space"
@@ -84,12 +85,13 @@
             <ImageView
                 android:id="@+id/step_photo_container"
                 android:contentDescription="@string/step_photo"
+                android:scaleType="fitCenter"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginTop="@dimen/content_space"
                 android:layout_marginLeft="@dimen/content_space"
                 android:layout_marginRight="@dimen/content_space"
-                android:background="#22000000" />
+                android:background="#05000000" />
             <EditText
                 android:id="@+id/step_description"
                 android:layout_marginTop="@dimen/content_space"
