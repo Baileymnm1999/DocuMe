@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.content.Context;
@@ -74,6 +75,7 @@ public class NewProject extends AppCompatActivity
     private ImageView mImageView;
     private Button selectPictureButton;
     public Uri uri;
+    public ArrayList<ProjectStep> mSteps;
 
 
     //Done setting up onClick
@@ -82,6 +84,7 @@ public class NewProject extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSteps = new ArrayList<ProjectStep>();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.new_project);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -177,10 +180,9 @@ public class NewProject extends AppCompatActivity
                         String description =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_description)).getText().toString();
                         Uri stepPicture = uri;
 
-                        ProjectStep step = new ProjectStep();
-                        step.setTitle(title);
-                        step.setDescription(description);
-                        step.setStepPicture(stepPicture);
+                        ProjectStep step = new ProjectStep(title, description, stepPicture);
+                        mSteps.add(step);
+
 
                         Log.d("TITLE", step.getTitle());
                         Log.d("DESCRIPTION", step.getDescription());

@@ -14,6 +14,14 @@ public class ProjectStep {
     private String mDescription;
     private Uri mStepPicture;
 
+    public ProjectStep(String title, String description, Uri stepPicture) {
+        this.mTitle = title;
+        this.mDescription = description;
+        this.mStepPicture = stepPicture;
+    }
+    public ProjectStep(){
+
+    }
 
     public String getTitle(){
         return this.mTitle;
