@@ -67,6 +67,7 @@ public class NewProject extends AppCompatActivity
     //Setting up onClick popup
 
     private Context mContext;
+    private Button saveProjectButton;
     private Activity mActivity;
     private LinearLayout mLinearLayout;
     private Button mButton;
@@ -109,6 +110,20 @@ public class NewProject extends AppCompatActivity
         // Get the widgets reference from XML layout
         mLinearLayout = (LinearLayout) findViewById(R.id.new_project_ll_form);
         mButton = (Button) findViewById(R.id.new_step_button);
+        saveProjectButton = (Button) findViewById(R.id.save_project_button);
+
+        saveProjectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                
+            }
+        });
+
+        final AlertDialog.Builder emptyTitleAlert = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Save Failed")
+                .setMessage("You must include a title in your step")
+                .setNegativeButton("Okay", null);
 
         // Set a click listener for the text view
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -176,18 +191,28 @@ public class NewProject extends AppCompatActivity
                     public void onClick(View view) {
                         // Dismiss the popup window
 
-                        String title =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_title)).getText().toString();
+                        Uri stepPicture = null;
+                        String title = "";
+
+                        title =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_title)).getText().toString();
                         String description =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_description)).getText().toString();
-                        Uri stepPicture = uri;
+                        stepPicture = uri;
+
+                        if (!title.isEmpty()){
+                            Log.d("TITLE", title);
+                        }else{
+                            Log.d("TITLE", "Empty Title");
+                            emptyTitleAlert.show();
+                        }
+                        if (description != null){
+                            Log.d("DESCRIPTION", description);
+                        }
+                        if (stepPicture != null) {
+                            Log.d("IMAGE URI", stepPicture.toString());
+                        }
 
                         ProjectStep step = new ProjectStep(title, description, stepPicture);
                         mSteps.add(step);
-
-
-                        Log.d("TITLE", step.getTitle());
-                        Log.d("DESCRIPTION", step.getDescription());
-                        Log.d("IMAGE URI", step.getStepPicture().toString());
-
 
                         mPopupWindow.dismiss();
                     }
