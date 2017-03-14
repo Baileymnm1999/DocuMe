@@ -4,7 +4,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="btnClick">+</string>
-
+    <string name="projects_file">projects.txt</string>
     <string name="genre_prompt">Project Genre</string>
     <string name="describe_your_project">"Describe your project&#8230;"</string>
     <string name="describe_this_step">"Describe this step&#8230;"</string>

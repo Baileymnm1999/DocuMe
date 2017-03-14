@@ -39,6 +39,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.text.Normalizer;
@@ -57,6 +59,10 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.view.ViewGroup.LayoutParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * Created by user on 12/13/16.
@@ -65,6 +71,11 @@ public class NewProject extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //Setting up onClick popup
+
+    private String mProjectTitle;
+    private String mProjectGenre;
+    private String mProjectDescription;
+    public ArrayList<ProjectStep> mSteps;
 
     private Context mContext;
     private Button saveProjectButton;
@@ -76,7 +87,7 @@ public class NewProject extends AppCompatActivity
     private ImageView mImageView;
     private Button selectPictureButton;
     public Uri uri;
-    public ArrayList<ProjectStep> mSteps;
+
 
 
     //Done setting up onClick
@@ -115,7 +126,87 @@ public class NewProject extends AppCompatActivity
         saveProjectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                
+                mProjectTitle = ((EditText) findViewById(R.id.project_name)).getText().toString();
+                mProjectGenre = ((Spinner) findViewById(R.id.genre_spinner)).getSelectedItem().toString();
+                mProjectDescription = ((EditText) findViewById(R.id.project_description)).getText().toString();
+
+                String projectsFilename = getResources().getText(R.string.projects_file).toString();
+                FileInputStream inputStream;
+                StringBuffer fileContent = new StringBuffer("");
+                byte[] buffer = new byte[1024];
+                Log.d("SavedProject", "Attempting to read from " + projectsFilename);
+                int n = -1;
+                try {
+                    inputStream = openFileInput(projectsFilename);
+                    while ((n = inputStream.read(buffer)) != -1) {
+                        fileContent.append(new String(buffer, 0, n));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d("File Output", fileContent.toString());
+
+                JSONArray allProjects = new JSONArray();
+                if (!fileContent.toString().isEmpty()) {
+                    try {
+                        Log.d("{POPULATING ARRAY", allProjects.toString());
+                        allProjects = new JSONArray(fileContent.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                JSONObject JSONProject = new JSONObject();
+                try {
+                    JSONProject.put("title", mProjectTitle);
+                    JSONProject.put("genre", mProjectGenre);
+                    JSONProject.put("description", mProjectDescription);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                JSONArray JSONStep = new JSONArray();
+                for (ProjectStep step : mSteps ) {
+                    JSONObject stepObj = new JSONObject();
+                    try {
+                        stepObj.put("title", step.getTitle());
+                        stepObj.put("description", step.getDescription());
+                        stepObj.put("stepPicture", step.getStepPicture());
+                        JSONStep.put(stepObj);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    JSONProject.put("Steps", JSONStep);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("JSON OUTPUT", JSONProject.toString());
+                FileOutputStream outputStream;
+                allProjects.put(JSONProject);
+                Log.d("SavedProject", "Attempting to write to " + projectsFilename);
+                try {
+                    outputStream = openFileOutput(projectsFilename, Context.MODE_PRIVATE);
+                    outputStream.write(allProjects.toString().getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d("ARRAY OUTPUT", allProjects.toString());
+                Log.d("FILE OUTPUT", fileContent.toString());
+                try {
+                    inputStream = openFileInput(projectsFilename);
+                    while ((n = inputStream.read(buffer)) != -1) {
+                        fileContent.append(new String(buffer, 0, n));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("ARRAY OUTPUT", allProjects.toString());
+                Log.d("FILE OUTPUT", fileContent.toString());
+                finish();
             }
         });
 

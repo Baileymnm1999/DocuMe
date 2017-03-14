@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileInputStream;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +46,32 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Parsing file for project data
+        FileInputStream inputStream;
+        String projectsFilename = getResources().getText(R.string.projects_file).toString();
+        StringBuffer fileContent = new StringBuffer("");
+        byte[] buffer = new byte[1024];
+        Log.d("SavedProject", "Attempting to read from " + projectsFilename);
+        int n = 0;
+        try {
+            inputStream = openFileInput(projectsFilename);
+            while ((n = inputStream.read(buffer)) != -1) {
+                fileContent.append(new String(buffer, 0, n));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d("File Output", fileContent.toString());
+        try {
+            JSONObject JSONProject = new JSONObject(fileContent.toString());
+            Log.d("JSONPROJET: ", JSONProject.toString());
+            Log.d("JSONTitle!!", JSONProject.getString("title"));
+            Log.d("Project Title", JSONProject.getJSONObject("title").toString());
+            Log.d("Steps Array", JSONProject.getJSONArray("Steps").toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
