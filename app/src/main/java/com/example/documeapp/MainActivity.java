@@ -1,7 +1,9 @@
 package com.example.documeapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -15,11 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.GridView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileInputStream;
+import java.net.URI;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,15 +68,30 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
         Log.d("File Output", fileContent.toString());
-        try {
-            JSONObject JSONProject = new JSONObject(fileContent.toString());
-            Log.d("JSONPROJET: ", JSONProject.toString());
-            Log.d("JSONTitle!!", JSONProject.getString("title"));
-            Log.d("Project Title", JSONProject.getJSONObject("title").toString());
-            Log.d("Steps Array", JSONProject.getJSONArray("Steps").toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        JSONArray allProjects = null ;
+        GridView gridView;
+        ArrayList<Item> gridArray = new ArrayList<Item>();
+        CustomGridViewAdapter customGridAdapter;
+        if (!fileContent.toString().isEmpty()) {
+            try {
+                allProjects = new JSONArray(fileContent.toString());
+                Log.d("JSONPROJECT: ", allProjects.toString());
+                //Log.d("JSONTitle!!", JSONProject.getString("title"));
+                //Log.d("Project Title", JSONProject.getJSONObject("title").toString());
+                //Log.d("Steps Array", JSONProject.getJSONArray("Steps").toString());
+                JSONObject project;
+                for (int i=0; i < allProjects.length(); i++) {
+                    project = allProjects.getJSONObject(i);
+                    Log.d("project title", project.getString("title"));
+                    gridArray.add(new Item(homeIcon,"Home"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+
         }
+
     }
 
     @Override
