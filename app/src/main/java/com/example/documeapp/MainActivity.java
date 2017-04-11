@@ -1,6 +1,8 @@
 package com.example.documeapp;
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,8 +18,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +30,7 @@ import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.net.URI;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,14 +41,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Button plusBtn = (Button)findViewById(R.id.button);
-        plusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, NewProject.class);
-                startActivity(i);
-            }
-        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         //Parsing file for project data
         FileInputStream inputStream;
@@ -69,10 +69,15 @@ public class MainActivity extends AppCompatActivity
         }
         Log.d("File Output", fileContent.toString());
         JSONArray allProjects = null ;
-        GridView gridView;
-        ArrayList<Item> gridArray = new ArrayList<Item>();
-        CustomGridViewAdapter customGridAdapter;
+        GridView gridView = (GridView) findViewById(R.id.project_grid_view);;
+        ArrayList<ClipData.Item> gridArray = new ArrayList<ClipData.Item>();
+        ListAdapter customGridAdapter;
         if (!fileContent.toString().isEmpty()) {
+
+            ViewStub stub = (ViewStub) findViewById(R.id.menu_stub);
+            stub.setLayoutResource(R.layout.project_grid_layout);
+            View inflated = stub.inflate();
+
             try {
                 allProjects = new JSONArray(fileContent.toString());
                 Log.d("JSONPROJECT: ", allProjects.toString());
@@ -83,12 +88,24 @@ public class MainActivity extends AppCompatActivity
                 for (int i=0; i < allProjects.length(); i++) {
                     project = allProjects.getJSONObject(i);
                     Log.d("project title", project.getString("title"));
-                    gridArray.add(new Item(homeIcon,"Home"));
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else{
+            ViewStub stub = (ViewStub) findViewById(R.id.menu_stub);
+            stub.setLayoutResource(R.layout.content_main);
+            View inflated = stub.inflate();
+
+            Button plusBtn = (Button)findViewById(R.id.button);
+            plusBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(MainActivity.this, NewProject.class);
+                    startActivity(i);
+                }
+            });
 
         }
 
