@@ -50,9 +50,16 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUi();
+    }
 
-        //Parsing file for project data
+    //Parsing file for project data
+    public void loadUi(){
         FileInputStream inputStream;
         String projectsFilename = getResources().getText(R.string.projects_file).toString();
         StringBuffer fileContent = new StringBuffer("");
@@ -69,14 +76,13 @@ public class MainActivity extends AppCompatActivity
         }
         Log.d("File Output", fileContent.toString());
         JSONArray allProjects = null ;
-        GridView gridView = (GridView) findViewById(R.id.project_grid_view);;
-        ArrayList<ClipData.Item> gridArray = new ArrayList<ClipData.Item>();
-        ListAdapter customGridAdapter;
+
         if (!fileContent.toString().isEmpty()) {
 
             ViewStub stub = (ViewStub) findViewById(R.id.menu_stub);
             stub.setLayoutResource(R.layout.project_grid_layout);
             View inflated = stub.inflate();
+            GridView gridView = (GridView) findViewById(R.id.project_grid_view);
 
             try {
                 allProjects = new JSONArray(fileContent.toString());
@@ -85,11 +91,8 @@ public class MainActivity extends AppCompatActivity
                 //Log.d("Project Title", JSONProject.getJSONObject("title").toString());
                 //Log.d("Steps Array", JSONProject.getJSONArray("Steps").toString());
                 JSONObject project;
-                for (int i=0; i < allProjects.length(); i++) {
-                    project = allProjects.getJSONObject(i);
-                    Log.d("project title", project.getString("title"));
-
-                }
+                JsonAdapter projectAdapter = new JsonAdapter(allProjects, getApplicationContext());
+                gridView.setAdapter(projectAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -98,18 +101,21 @@ public class MainActivity extends AppCompatActivity
             stub.setLayoutResource(R.layout.content_main);
             View inflated = stub.inflate();
 
-            Button plusBtn = (Button)findViewById(R.id.button);
-            plusBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MainActivity.this, NewProject.class);
-                    startActivity(i);
-                }
-            });
+
 
         }
 
+        Button plusBtn = (Button)findViewById(R.id.button);
+        plusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, NewProject.class);
+                startActivity(i);
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {
