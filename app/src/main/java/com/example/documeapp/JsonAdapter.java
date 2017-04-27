@@ -57,26 +57,32 @@ public class JsonAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View tile = null;
-        try {
-            JSONObject project = m_projects.getJSONObject(position);
 
-            tile = convertView;
-            if (convertView == null)
-                tile = inflater.inflate(R.layout.tile, null);
-            TextView tileTitle = (TextView) tile.findViewById(R.id.tileTitle);
-            tileTitle.setText(project.getString("title"));
-            if (tile != null){
-                Log.d("IT DID STUFF", "Not Null");
-            }else{
-                Log.d("IT BRICKED", "Null");
+        if (position == m_projects.length()-1){
+                tile = inflater.inflate(R.layout.plus_button, null);
+            TextView tileTitle = (TextView) tile.findViewById(R.id.plus_tile);
+            tileTitle.setText("+");
+
+        }else{
+            try {
+                JSONObject project = m_projects.getJSONObject(position);
+                if(project.length() == 0){
+                    tile = inflater.inflate(R.layout.plus_button, null);
+                    TextView tileTitle = (TextView) tile.findViewById(R.id.plus_tile);
+                    tileTitle.setText("+");
+                }else{
+                    tile = convertView;
+                    if (convertView == null)
+                        tile = inflater.inflate(R.layout.tile, null);
+                    TextView tileTitle = (TextView) tile.findViewById(R.id.tileTitle);
+                    if (tileTitle != null) {
+                        tileTitle.setText(project.getString("title"));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
 
         return tile;
     }

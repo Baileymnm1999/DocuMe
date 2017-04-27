@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListAdapter;
@@ -50,13 +51,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         loadUi();
     }
+
 
     //Parsing file for project data
     public void loadUi(){
@@ -82,10 +79,13 @@ public class MainActivity extends AppCompatActivity
             ViewStub stub = (ViewStub) findViewById(R.id.menu_stub);
             stub.setLayoutResource(R.layout.project_grid_layout);
             View inflated = stub.inflate();
-            GridView gridView = (GridView) findViewById(R.id.project_grid_view);
+            final GridView gridView = (GridView) findViewById(R.id.project_grid_view);
+            //Button plusButton = (Button) findViewById(R.id.plus_button);
 
             try {
                 allProjects = new JSONArray(fileContent.toString());
+                JSONObject dummyPlusObject = new JSONObject();
+                allProjects.put(dummyPlusObject);
                 Log.d("JSONPROJECT: ", allProjects.toString());
                 //Log.d("JSONTitle!!", JSONProject.getString("title"));
                 //Log.d("Project Title", JSONProject.getJSONObject("title").toString());
@@ -93,6 +93,15 @@ public class MainActivity extends AppCompatActivity
                 JSONObject project;
                 JsonAdapter projectAdapter = new JsonAdapter(allProjects, getApplicationContext());
                 gridView.setAdapter(projectAdapter);
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if( position == gridView.getCount()-1){
+                            Intent i = new Intent(MainActivity.this, NewProject.class);
+                            startActivity(i);
+                        }
+                    }
+                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -100,19 +109,18 @@ public class MainActivity extends AppCompatActivity
             ViewStub stub = (ViewStub) findViewById(R.id.menu_stub);
             stub.setLayoutResource(R.layout.content_main);
             View inflated = stub.inflate();
-
+            Button plusBtn = (Button)findViewById(R.id.button);
+            plusBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(MainActivity.this, NewProject.class);
+                    startActivity(i);
+                }
+            });
 
 
         }
 
-        Button plusBtn = (Button)findViewById(R.id.button);
-        plusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, NewProject.class);
-                startActivity(i);
-            }
-        });
     }
 
 

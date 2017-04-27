@@ -92,7 +92,6 @@ public class NewProject extends AppCompatActivity
 
     //Done setting up onClick
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +122,13 @@ public class NewProject extends AppCompatActivity
         mButton = (Button) findViewById(R.id.new_step_button);
         saveProjectButton = (Button) findViewById(R.id.save_project_button);
 
+        final AlertDialog.Builder emptyTitleAlert = new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Save Failed")
+                .setMessage("You must include a title")
+                .setNegativeButton("Okay", null);
+
+
         saveProjectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -130,91 +136,98 @@ public class NewProject extends AppCompatActivity
                 mProjectGenre = ((Spinner) findViewById(R.id.genre_spinner)).getSelectedItem().toString();
                 mProjectDescription = ((EditText) findViewById(R.id.project_description)).getText().toString();
 
-                String projectsFilename = getResources().getText(R.string.projects_file).toString();
-                FileInputStream inputStream;
-                StringBuffer fileContent = new StringBuffer("");
-                byte[] buffer = new byte[1024];
-                Log.d("SavedProject", "Attempting to read from " + projectsFilename);
-                int n = -1;
-                try {
-                    inputStream = openFileInput(projectsFilename);
-                    while ((n = inputStream.read(buffer)) != -1) {
-                        fileContent.append(new String(buffer, 0, n));
+                    if (mProjectTitle.isEmpty()){
+                        emptyTitleAlert.show();
+                        return;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("File Output", fileContent.toString());
 
-                JSONArray allProjects = new JSONArray();
-                if (!fileContent.toString().isEmpty()) {
+
+                    String projectsFilename = getResources().getText(R.string.projects_file).toString();
+                    FileInputStream inputStream;
+                    StringBuffer fileContent = new StringBuffer("");
+                    byte[] buffer = new byte[1024];
+                    Log.d("SavedProject", "Attempting to read from " + projectsFilename);
+                    int n = -1;
                     try {
-                        Log.d("{POPULATING ARRAY", allProjects.toString());
-                        allProjects = new JSONArray(fileContent.toString());
+                        inputStream = openFileInput(projectsFilename);
+                        while ((n = inputStream.read(buffer)) != -1) {
+                            fileContent.append(new String(buffer, 0, n));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("File Output", fileContent.toString());
+
+                    JSONArray allProjects = new JSONArray();
+                    if (!fileContent.toString().isEmpty()) {
+                        try {
+                            Log.d("{POPULATING ARRAY", allProjects.toString());
+                            allProjects = new JSONArray(fileContent.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                    JSONObject JSONProject = new JSONObject();
+                    try {
+                        JSONProject.put("title", mProjectTitle);
+                        JSONProject.put("genre", mProjectGenre);
+                        JSONProject.put("description", mProjectDescription);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-
-
-                JSONObject JSONProject = new JSONObject();
-                try {
-                    JSONProject.put("title", mProjectTitle);
-                    JSONProject.put("genre", mProjectGenre);
-                    JSONProject.put("description", mProjectDescription);
-                }catch (JSONException e){
-                    e.printStackTrace();
-                }
-                JSONArray JSONStep = new JSONArray();
-                for (ProjectStep step : mSteps ) {
-                    JSONObject stepObj = new JSONObject();
+                    JSONArray JSONStep = new JSONArray();
+                    for (ProjectStep step : mSteps) {
+                        JSONObject stepObj = new JSONObject();
+                        try {
+                            stepObj.put("title", step.getTitle());
+                            stepObj.put("description", step.getDescription());
+                            stepObj.put("stepPicture", step.getStepPicture());
+                            JSONStep.put(stepObj);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     try {
-                        stepObj.put("title", step.getTitle());
-                        stepObj.put("description", step.getDescription());
-                        stepObj.put("stepPicture", step.getStepPicture());
-                        JSONStep.put(stepObj);
-                    }catch (JSONException e){
+                        JSONProject.put("Steps", JSONStep);
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                try {
-                    JSONProject.put("Steps", JSONStep);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d("JSON OUTPUT", JSONProject.toString());
-                FileOutputStream outputStream;
-                allProjects.put(JSONProject);
-                Log.d("SavedProject", "Attempting to write to " + projectsFilename);
-                try {
-                    outputStream = openFileOutput(projectsFilename, Context.MODE_PRIVATE);
-                    outputStream.write(allProjects.toString().getBytes());
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("ARRAY OUTPUT", allProjects.toString());
-                Log.d("FILE OUTPUT", fileContent.toString());
-                try {
-                    inputStream = openFileInput(projectsFilename);
-                    while ((n = inputStream.read(buffer)) != -1) {
-                        fileContent.append(new String(buffer, 0, n));
+                    Log.d("JSON OUTPUT", JSONProject.toString());
+                    FileOutputStream outputStream;
+                    allProjects.put(JSONProject);
+                    Log.d("SavedProject", "Attempting to write to " + projectsFilename);
+                    try {
+                        outputStream = openFileOutput(projectsFilename, Context.MODE_PRIVATE);
+                        outputStream.write(allProjects.toString().getBytes());
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    Log.d("ARRAY OUTPUT", allProjects.toString());
+                    Log.d("FILE OUTPUT", fileContent.toString());
+                    try {
+                        inputStream = openFileInput(projectsFilename);
+                        while ((n = inputStream.read(buffer)) != -1) {
+                            fileContent.append(new String(buffer, 0, n));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                Log.d("ARRAY OUTPUT", allProjects.toString());
-                Log.d("FILE OUTPUT", fileContent.toString());
-                finish();
+                    Log.d("ARRAY OUTPUT", allProjects.toString());
+                    Log.d("FILE OUTPUT", fileContent.toString());
+                    finish();
+
+
+
+
+
             }
         });
 
-        final AlertDialog.Builder emptyTitleAlert = new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Save Failed")
-                .setMessage("You must include a title in your step")
-                .setNegativeButton("Okay", null);
+
 
         // Set a click listener for the text view
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -294,6 +307,7 @@ public class NewProject extends AppCompatActivity
                         }else{
                             Log.d("TITLE", "Empty Title");
                             emptyTitleAlert.show();
+                            return;
                         }
                         if (description != null){
                             Log.d("DESCRIPTION", description);
