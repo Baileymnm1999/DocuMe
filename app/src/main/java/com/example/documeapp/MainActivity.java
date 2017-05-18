@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 allProjects = new JSONArray(fileContent.toString());
                 JSONObject dummyPlusObject = new JSONObject();
+                dummyPlusObject.put("title", "");
                 allProjects.put(dummyPlusObject);
                 Log.d("JSONPROJECT: ", allProjects.toString());
                 //Log.d("JSONTitle!!", JSONProject.getString("title"));

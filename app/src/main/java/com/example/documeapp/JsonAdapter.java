@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.Format;
 import java.util.jar.JarInputStream;
 
@@ -58,15 +59,19 @@ public class JsonAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View tile = null;
 
-        if (position == m_projects.length()-1){
-                tile = inflater.inflate(R.layout.plus_button, null);
-            TextView tileTitle = (TextView) tile.findViewById(R.id.plus_tile);
-            tileTitle.setText("+");
-
-        }else{
+//      if (project.getString("title").is)
+//        if (){
+//                tile = inflater.inflate(R.layout.plus_button, null);
+//            TextView tileTitle = (TextView) tile.findViewById(R.id.plus_tile);
+//            tileTitle.setText("+");
+//
+//        }else{
             try {
                 JSONObject project = m_projects.getJSONObject(position);
-                if(project.length() == 0){
+                JSONObject dummyPlusButton = m_projects.getJSONObject(m_projects.length()-1);
+
+//                if(project.getString("title").isEmpty()){
+                if(project.getString("title").isEmpty()){
                     tile = inflater.inflate(R.layout.plus_button, null);
                     TextView tileTitle = (TextView) tile.findViewById(R.id.plus_tile);
                     tileTitle.setText("+");
@@ -82,7 +87,7 @@ public class JsonAdapter extends BaseAdapter {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
+//        }
 
         return tile;
     }

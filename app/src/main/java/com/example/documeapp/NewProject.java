@@ -174,6 +174,7 @@ public class NewProject extends AppCompatActivity
                         JSONProject.put("title", mProjectTitle);
                         JSONProject.put("genre", mProjectGenre);
                         JSONProject.put("description", mProjectDescription);
+                        JSONProject.put("place", allProjects.length());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
