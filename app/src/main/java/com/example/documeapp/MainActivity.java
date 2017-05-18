@@ -104,27 +104,26 @@ public class MainActivity extends AppCompatActivity
      //                   }
       //              }
       //          });
-                gridView.setOnItemClickListener(new OnItemClickListener()
-                {
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                     {
                         // Check if this was the + button
 
-                        if( postion == gridView.getCount() - 1)
+                        if( position == gridView.getCount() - 1)
                         {
                             Intent i = new Intent(MainActivity.this, NewProject.class);
                             startActivity(i);
                         }
                         else {
-                            // Start new activity from NewProject
-                            JSONObject project = gridView.getItem(position);
-                            Intent project_activity = new Activity(MainActivity.this, ViewProject.class);
-                            project_activity.putString("project", project.toString());
+                            // Start new activity from NewProject\
+                            Object project = ((JsonAdapter)gridView.getAdapter()).getItem(position);
+                            Intent project_activity = new Intent(MainActivity.this, ViewProject.class);
+                            project_activity.putExtra("project", project.toString());
                             startActivity(project_activity);
                         }
                     }
-                })
+                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -145,7 +144,6 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-
 
 
     @Override
