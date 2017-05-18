@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 import org.json.JSONArray;
@@ -43,7 +44,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 
-class ViewProject extends AppCompatActivity
+public class ViewProject extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -66,9 +67,9 @@ class ViewProject extends AppCompatActivity
         }
 
         // Set up the header
-        EditText p_name = (EditText) findViewById(R.id.p_name);
-        EditText p_genre = (EditText) findViewById(R.id.p_genre);
-        EditText p_description = (EditText) findViewById(R.id.p_description);
+        TextView p_name = (TextView) findViewById(R.id.p_name);
+        TextView p_genre = (TextView) findViewById(R.id.p_genre);
+        TextView p_description = (TextView) findViewById(R.id.p_description);
 
         try {
 
@@ -82,15 +83,8 @@ class ViewProject extends AppCompatActivity
 
         ListView step_list = (ListView) findViewById(R.id.p_steps);
 
-            ArrayAdapter stepTitles = new ArrayAdapter<String>(this, R.layout.view_project);
-
-        JSONArray p_steps = project.getJSONArray("Steps");
-        for (int index = 0; index < p_steps.length(); index++) {
-            JSONObject step = p_steps.getJSONObject(index);
-            stepTitles.add(step.getString("title"));
-
-
-        }
+            JSONArray p_steps = project.getJSONArray("Steps");
+            StepAdapter stepTitles = new StepAdapter(p_steps, getApplicationContext());
             step_list.setAdapter(stepTitles);
         }catch (JSONException e){
             e.printStackTrace();

@@ -9,28 +9,43 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="?attr/actionBarSize">
+
+
+            <TextView
+                android:textColor="@color/black"
+                android:paddingLeft="@dimen/indent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/p_genre"/>
+            <TextView
+                android:textColor="@color/black"
+                android:paddingLeft="@dimen/indent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/p_description"/>
+            <ListView
+                android:paddingLeft="@dimen/indent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/p_steps" />
+        </LinearLayout>
+    </LinearLayout>
+
     <include
-        layout="@layout/app_bar_main"
+        layout="@layout/title_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/p_name"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/p_genre"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/p_description"/>
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/p_steps"/>
 
 
     <ViewStub
