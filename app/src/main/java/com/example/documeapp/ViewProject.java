@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,12 +30,15 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileInputStream;
+
 import java.io.IOException;
+
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -44,13 +49,16 @@ class ViewProject extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         JSONObject project = new JSONObject();
+
 
         // Set the content view
         setContentView(R.layout.view_project);
 
         // Get the project data
         // TODO: some error checking to make sure we have the project
+
         try{
             project = new JSONObject(getIntent().getStringExtra("project"));
         }catch (JSONException e){
@@ -65,11 +73,13 @@ class ViewProject extends AppCompatActivity
         try {
 
 
+
         p_name.setText(project.getString("title"));
         p_genre.setText(project.getString("genre"));
         p_description.setText(project.getString("description"));
 
         // Set up the project steps
+
         ListView step_list = (ListView) findViewById(R.id.p_steps);
 
             ArrayAdapter stepTitles = new ArrayAdapter<String>(this, R.layout.view_project);
@@ -87,11 +97,12 @@ class ViewProject extends AppCompatActivity
         }
 
 
-    }
 
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
+
 }
