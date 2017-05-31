@@ -17,6 +17,8 @@
     <string name="choose_picture">Choose Picture</string>
     <string name="take_a_picture">Take a Picture</string>
     <string name="step_title">Step title</string>
+    <string name="genre">Genre</string>
+    <string name="description">Description</string>
 
     <string-array name="genres">
         <item>Arts and Entertainment</item>

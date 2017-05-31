@@ -19,8 +19,8 @@
             android:id="@+id/project_grid_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:numColumns="2"
             android:gravity="center_horizontal"
+            android:numColumns="2"
             android:verticalSpacing="@dimen/activity_vertical_margin"
             android:horizontalSpacing="@dimen/activity_vertical_margin"
             android:layout_marginTop="?attr/actionBarSize">

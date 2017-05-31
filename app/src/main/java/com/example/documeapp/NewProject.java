@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -289,6 +291,7 @@ public class NewProject extends AppCompatActivity
                     }
                 });
 
+
                 // Get a reference for the custom view close button
                 Button save_button = (Button) customView.findViewById(R.id.save_step_button);
 
@@ -310,6 +313,7 @@ public class NewProject extends AppCompatActivity
                         }else{
                             Log.d("TITLE", "Empty Title");
                             emptyTitleAlert.show();
+                            mPopupWindow.dismiss();
                             return;
                         }
                         if (description != null){
@@ -323,6 +327,7 @@ public class NewProject extends AppCompatActivity
                         mSteps.add(step);
 
                         mPopupWindow.dismiss();
+
                     }
                 });
 
@@ -348,6 +353,7 @@ public class NewProject extends AppCompatActivity
 
     }
 
+
     //Create int to request camera to take a picture
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -370,7 +376,7 @@ public class NewProject extends AppCompatActivity
     //Retrieve thumbnail bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK ) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
@@ -379,13 +385,14 @@ public class NewProject extends AppCompatActivity
             uri =data.getData();
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                mImageView.setImageBitmap(rotateImage(bitmap, 90));
+                //mImageView.setImageBitmap(rotateImage(bitmap, 90));
+                mImageView.setImageBitmap(bitmap);
             }catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(),"Invalid File",Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),"Invalid File",Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(getApplicationContext(),"An error occurred",Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(),"No picture taken or selected",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -450,6 +457,7 @@ public class NewProject extends AppCompatActivity
         }
         else {
             if (mPopupWindow != null && mPopupWindow.isShowing()) {
+                Log.d("ALERT", "ATTEMPTING TO CLOSE POPUP WINDOW, BACKPRESS DETECTED");
                 mPopupWindow.dismiss();
             }
             else {

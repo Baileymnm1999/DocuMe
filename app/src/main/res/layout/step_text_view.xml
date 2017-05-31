@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
-android:layout_height="match_parent">
+android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:paddingTop="@dimen/editText_margin">
 
     <TextView
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/title_text_view"/>
+        android:id="@+id/title_text_view"
+        android:textSize="15dp"
+        android:textStyle="bold" />
     <TextView
         android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/description_text_view"/>
+    <ImageView
+        android:id="@+id/step_view_photo_container"
+        android:contentDescription="@string/step_photo"
+        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+        <!--android:layout_marginTop="@dimen/content_space"
+        android:layout_marginLeft="@dimen/content_space"
+        android:layout_marginRight="@dimen/content_space"/>-->
 
 </LinearLayout>
