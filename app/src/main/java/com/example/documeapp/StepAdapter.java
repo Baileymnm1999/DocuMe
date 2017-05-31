@@ -88,17 +88,17 @@ public class StepAdapter extends BaseAdapter {
 
                 Uri pictureUri = Uri.parse(step.getString("stepPicture"));
                 ImageView stepImageView = (ImageView) stepView.findViewById(R.id.step_view_photo_container);
-                stepImageView.setImageURI(null);
-                stepImageView.setImageURI(pictureUri);
+                //stepImageView.setImageURI(null);
+                //stepImageView.setImageURI(pictureUri);
 
-                try{
+                /*try{
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(m_viewLocation.getContentResolver(), pictureUri);
                     stepImageView.setImageBitmap(bitmap);
                     //stepImageView.getLayoutParams().height = 500;
 
                 }catch (IOException e){
                     e.printStackTrace();
-                }
+                }*/
              /*   try{
 
                     ParcelFileDescriptor parcelFileDescriptor = m_viewLocation.getContentResolver().openFileDescriptor(pictureUri, "r");
