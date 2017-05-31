@@ -94,7 +94,7 @@ public class StepAdapter extends BaseAdapter {
                 try{
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(m_viewLocation.getContentResolver(), pictureUri);
                     stepImageView.setImageBitmap(bitmap);
-                    stepImageView.getLayoutParams().height = 500;
+                    //stepImageView.getLayoutParams().height = 500;
 
                 }catch (IOException e){
                     e.printStackTrace();
