@@ -49,6 +49,7 @@ import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -307,7 +308,6 @@ public class NewProject extends AppCompatActivity
                         title =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_title)).getText().toString();
                         String description =  ((EditText) mPopupWindow.getContentView().findViewById(R.id.step_description)).getText().toString();
                         stepPicture = uri;
-
                         if (!title.isEmpty()){
                             Log.d("TITLE", title);
                         }else{
@@ -373,6 +373,8 @@ public class NewProject extends AppCompatActivity
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
+
+
     //Retrieve thumbnail bitmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -380,13 +382,42 @@ public class NewProject extends AppCompatActivity
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
-            uri =data.getData();
+            try {
+                File file = createImageFile();
+                if (file != null) {
+                    FileOutputStream fout;
+                    try {
+                        fout = new FileOutputStream(file);
+                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 70, fout);
+                        fout.flush();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                uri = Uri.fromFile(file);
+                Log.d("Uri @ Capture", uri.toString());
+            }catch(IOException e){
+                e.printStackTrace();
+            }
         }else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
             uri =data.getData();
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                //mImageView.setImageBitmap(rotateImage(bitmap, 90));
                 mImageView.setImageBitmap(bitmap);
+                File file = createImageFile();
+                if (file != null) {
+                    FileOutputStream fout;
+                    try {
+                        fout = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 70, fout);
+                        fout.flush();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                uri = Uri.fromFile(file);
+                Log.d("Uri @ Capture", uri.toString());
+
             }catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(),"Invalid File",Toast.LENGTH_SHORT).show();
@@ -407,21 +438,23 @@ public class NewProject extends AppCompatActivity
     //Function to create a file documenting photo filename and location
 //    String mCurrentPhotoPath;
 //
-//    private File createImageFile() throws IOException {
-//        // Create an image file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-//
-//        // Save a file: path for use with ACTION_VIEW intents
-//        mCurrentPhotoPath = image.getAbsolutePath();
-//        return image;
-//    }
+    public File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File mFileTemp = null;
+        String root= mActivity.getDir("my_sub_dir",Context.MODE_PRIVATE).getAbsolutePath();
+        File myDir = new File(root + "/Img");
+        if(!myDir.exists()){
+            myDir.mkdirs();
+        }
+        try {
+            mFileTemp=File.createTempFile(imageFileName,".jpg",myDir.getAbsoluteFile());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return mFileTemp;
+    }
 
 /*    static final int REQUEST_TAKE_PHOTO = 1;
 

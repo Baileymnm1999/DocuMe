@@ -17,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.net.URI;
@@ -83,13 +86,19 @@ public class StepAdapter extends BaseAdapter {
             TextView descriptionView = (TextView) stepView.findViewById(R.id.description_text_view);
             descriptionView.setText(desciption);
 
-            if (step.getString("stepPicture") != null){
 
+            if (step.has("stepPicture") && !step.isNull("stepPicture")){
 
-                Uri pictureUri = Uri.parse(step.getString("stepPicture"));
+                String stepPicture = step.getString("stepPicture");
+                Uri pictureUri = Uri.parse(stepPicture);
+                Log.d("stepPicture Value", stepPicture);
+
                 ImageView stepImageView = (ImageView) stepView.findViewById(R.id.step_view_photo_container);
                 //stepImageView.setImageURI(null);
                 //stepImageView.setImageURI(pictureUri);
+
+                Picasso.with(m_viewLocation.getApplicationContext()).load(new File(pictureUri.getPath())).into(stepImageView);
+                stepImageView.getLayoutParams().height = 900;
 
                 /*try{
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(m_viewLocation.getContentResolver(), pictureUri);
@@ -121,6 +130,7 @@ public class StepAdapter extends BaseAdapter {
 
 
         } catch (JSONException e) {
+            Log.d("Adapter Failed", "Did not work");
             e.printStackTrace();
         }
 
