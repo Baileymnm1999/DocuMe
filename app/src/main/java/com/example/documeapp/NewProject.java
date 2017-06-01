@@ -380,22 +380,23 @@ public class NewProject extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK ) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+            uri = data.getData();
+            Bitmap imageBitmapThumb = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmapThumb);
             try {
                 File file = createImageFile();
                 if (file != null) {
                     FileOutputStream fout;
                     try {
                         fout = new FileOutputStream(file);
-                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 70, fout);
+                        imageBitmapThumb.compress(Bitmap.CompressFormat.PNG, 100, fout);
                         fout.flush();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 uri = Uri.fromFile(file);
-                Log.d("Uri @ Capture", uri.toString());
+                Log.d("Uri @ Save", uri.toString());
             }catch(IOException e){
                 e.printStackTrace();
             }

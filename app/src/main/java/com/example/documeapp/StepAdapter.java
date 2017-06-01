@@ -97,7 +97,8 @@ public class StepAdapter extends BaseAdapter {
                 //stepImageView.setImageURI(null);
                 //stepImageView.setImageURI(pictureUri);
 
-                Picasso.with(m_viewLocation.getApplicationContext()).load(new File(pictureUri.getPath())).into(stepImageView);
+
+                Picasso.with(m_viewLocation.getApplicationContext()).load(new File(pictureUri.getPath())).fit().centerCrop().into(stepImageView);
                 stepImageView.getLayoutParams().height = 900;
 
                 /*try{
